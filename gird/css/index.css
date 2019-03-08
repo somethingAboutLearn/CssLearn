@@ -1,0 +1,127 @@
+@import 'base.css';
+
+#grid1 ul {
+  display: grid;
+  grid-template-columns: 10vw auto 20vw 30vw;
+  grid-template-rows: 50px 100px auto 80px;
+  grid-gap: 10px;
+}
+
+#grid2 ul {
+  display: grid;
+  grid-template-columns: 10vw auto 20vw 30vw;
+  grid-template-rows: 50px 100px auto 80px;
+  grid-gap: 10px;
+}
+
+#grid2 .header,
+#grid2 .footer {
+  grid-column: 1 / -1;
+}
+
+#grid3 ul {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-areas: 'h h h h h h h h h h h h' 'c1 c1 c1 c1 c1 c1 c2 c2 c2 c2 c2 c2' '. c3 c3 c3 c3 c3 c4 c4 c4 c4 c4 .' '. . c5 c5 c5 c5 c6 c6 c6 c6 . .' '. . . c7 c7 c7 c8 c8 c8 . . .' '. . . . c9 c9 c10 c10 . . . .' '. . . . .c11 c12 . . . . .' 'f f f f f f f f f f f f';
+}
+
+#grid3 .header {
+  grid-area: h;
+}
+
+#grid3 .c1 {
+  grid-area: c1;
+}
+
+#grid3 .c2 {
+  grid-area: c2;
+}
+
+#grid3 .c3 {
+  grid-area: c3;
+}
+
+#grid3 .c4 {
+  grid-area: c4;
+}
+
+#grid3 .c5 {
+  grid-area: c5;
+}
+
+#grid3 .c6 {
+  grid-area: c6;
+}
+
+#grid3 .c7 {
+  grid-area: c7;
+}
+
+#grid3 .c8 {
+  grid-area: c8;
+}
+
+#grid3 .c9 {
+  grid-area: c9;
+}
+
+#grid3 .c10 {
+  grid-area: c10;
+}
+
+#grid3 .c11 {
+  grid-area: c11;
+}
+
+#grid3 .c12 {
+  grid-area: c12;
+}
+
+#grid3 .footer {
+  grid-area: f;
+}
+
+#grid4 ul {
+  display: grid;
+  grid-template-columns: [left]100px [main]auto [right]150px;
+}
+
+#grid4 .main {
+  height: 500px;
+  grid-area: main;
+}
+
+#grid4 .left {
+  height: 400px;
+  grid-area: left;
+}
+
+#grid4 .right {
+  height: 300px;
+  grid-area: right;
+}
+
+#grid5 ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  grid-auto-rows: 100px;
+  grid-gap: 5px;
+  grid-auto-flow: dense;
+}
+
+#grid5 .small {
+  grid-column: span 1;
+}
+
+#grid5 .middle {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+#grid5 .big {
+  grid-column: span 4;
+}
+
+#grid5 .bigger {
+  grid-column: span 4;
+}

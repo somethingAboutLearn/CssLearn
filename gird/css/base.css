@@ -1,0 +1,56 @@
+html, body, div, article, header, section, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  width: 90vw;
+  margin: 0 auto;
+}
+
+.container header {
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-left: 10px solid #000;
+  border-bottom: 1px solid #000;
+  margin: 20px auto;
+  font-size: 1em;
+  font-weight: 700;
+  color: #666;
+}
+
+.container section {
+  background-color: #f2f2f2;
+}
+
+ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  color: #fff;
+}
+
+ul li:nth-child(n) {
+  --bg: #96ceb4;
+  background: var(--bg);
+}
+
+ul li:nth-child(2n) {
+  --bg: #88d8b0;
+  background: var(--bg);
+}
+
+ul li:nth-child(3n) {
+  --bg: #ff6f69;
+  background: var(--bg);
+}
+
+ul li:nth-child(4n) {
+  --bg: #ffcc5c;
+  background: var(--bg);
+}
