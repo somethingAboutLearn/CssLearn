@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CSS 揭秘</title>
+</head>
+<style>
+    html,
+    body,
+    section,
+    h1,
+    p,
+    pre,
+    div,
+    a,
+    img {
+        padding: 0;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+    }
+
+    section {
+        max-width: 1200px;
+        min-width: 1080px;
+        padding: 20px 0;
+        margin: 0 auto;
+    }
+
+    @keyframes an {
+        to {
+            background-position: 100%;
+        }
+    }
+
+    /* 平行四边形 */
+
+    .parallelogram::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #000;
+        transform: skewX(-45deg);
+        z-index: -1;
+    }
+
+    /* 棋盘 */
+
+    .svg-checkerboard {
+        width: 180px;
+        height: 180px;
+        background: #fff url('data:image/svg+xml, \
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"> \
+                <rect x="50" width="50" height="50" style="fill: rgb(0, 0, 0);"></rect> \
+                <rect y="50" width="50" height="50" style="fill: rgb(0, 0, 0);"></rect> \
+            </svg> \
+        ');
+        background-size: 30px 30px;
+    }
+
+    /* 切角 */
+
+    .svg-chamfer {
+        width: 180px;
+        height: 180px;
+        background: #fff url('data:image/svg+xml, \
+            <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3"> \
+                <polygon points="1,0 2,0 3,1 3,2 2,3 1,3 0,2 0,1"></polygon> \
+            </svg> \
+        ');
+        background-size: 100% 100%;
+    }
+
+    .svg-chamfer-border-image {
+        width: 140px;
+        height: 140px;
+        background-color: #000;
+        border: 20px solid #000;
+        border-image: 1 url('data:image/svg+xml, \
+            <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3"> \
+                <polygon points="1,0 2,0 3,1 3,2 2,3 1,3 0,2 0,1"></polygon> \
+            </svg> \
+        ');
+        background-size: 100% 100%;
+        background-clip: padding-box;
+    }
+
+    /* 路标 */
+
+    .guidepost::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 100%;
+        width: 45px;
+        background-image: linear-gradient(-135deg, transparent 50%, #000 0), linear-gradient(-45deg, transparent 50%, #000 0);
+        background-position: top, bottom;
+        background-size: 100% 50%;
+        background-repeat: no-repeat;
+    }
+
+    /* 梯形 */
+
+    .trapezoid::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        background-color: #000;
+        z-index: -1;
+        transform: perspective(200px) rotateX(45deg);
+    }
+
+    .trapezoid:nth-of-type(3):before {
+        transform-origin: bottom;
+    }
+
+    .trapezoid:nth-of-type(4):before {
+        transform-origin: bottom;
+        transform: scaleY(1.9) perspective(200px) rotateX(45deg);
+    }
+
+    /* 简单的饼图 */
+
+    .pie-chart::after {
+        content: "";
+        display: block;
+        width: 50%;
+        margin-left: 50%;
+        height: 100%;
+        background-color: inherit;
+        border-radius: 0 100% 100% 0/ 0 50% 50% 0;
+        transform: rotate(30deg);
+        transform-origin: left;
+    }
+
+    .pie-chart:nth-of-type(2)::after {
+        background-color: #655;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(.5turn);
+        }
+    }
+
+    @keyframes bg {
+        50% {
+            background-color: #655;
+        }
+    }
+
+    .pie-chart:nth-of-type(3)::after {
+        transform: rotate(0);
+        animation: spin 3s linear infinite;
+    }
+
+    .pie-chart:nth-of-type(4)::after {
+        transform: rotate(0);
+        animation: spin 3s linear infinite, bg 6s step-end infinite;
+    }
+
+    .pie::before {
+        content: "";
+        display: block;
+        width: 50%;
+        margin-left: 50%;
+        height: 100%;
+        background-color: inherit;
+        border-radius: 0 100% 100% 0/ 0 50% 50% 0;
+        transform: rotate(30deg);
+        transform-origin: left;
+    }
+
+    .pie:nth-of-type(5)::before {
+        transform: rotate(0);
+        animation: spin 50s linear infinite, bg 100s step-end infinite;
+        animation-play-state: paused;
+        animation-delay: inherit;
+    }
+
+    .pie:nth-of-type(6)::before {
+        transform: rotate(0);
+        animation: spin 50s linear infinite, bg 100s step-end infinite;
+        animation-play-state: paused;
+        animation-delay: inherit;
+    }
+
+    @keyframes fillup {
+        to {
+            stroke-dasharray: 314 314;
+        }
+    }
+
+    /* 染色效果 */
+
+    .filter:nth-of-type(2) img {
+        transition: .5s filter;
+        filter: sepia(1) saturate(4) hue-rotate(295deg);
+    }
+
+    .filter:nth-of-type(2) img:hover {
+        filter: none;
+    }
+
+    .filter:nth-of-type(4):hover {
+        background-color: transparent !important;
+    }
+
+    /* 毛玻璃效果 */
+
+    .ground-glass::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url('img/2.jpeg');
+        background-size: 100%;
+        filter: blur(20px);
+    }
+
+    /* 折角效果 */
+
+    .dog-ear:nth-of-type(1):before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 24px;
+        background-image: linear-gradient(-150deg, transparent 50%, rgba(0, 0, 0, 0.4) 0);
+        background-position: right top;
+        background-repeat: no-repeat;
+    }
+
+    .dog-ear:nth-of-type(2):before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 24px;
+        height: 40px;
+        background-image: linear-gradient(to left bottom, transparent 50%, rgba(0, 0, 0, 0.4) 0);
+        background-position: right top;
+        background-repeat: no-repeat;
+        transform: translateY(-18px) rotate(-30deg);
+        transform-origin: bottom right;
+    }
+
+    .dog-ear:nth-of-type(3):before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 24px;
+        height: 40px;
+        border-bottom-left-radius: inherit;
+        box-shadow: -6px 6px 9px -4px rgba(0, 0, 0, .15);
+        background-image: linear-gradient(to left bottom, transparent 50%, rgba(0, 0, 0, 0.4) 0);
+        background-position: right top;
+        background-repeat: no-repeat;
+        transform: translateY(-18px) rotate(-30deg);
+        transform-origin: bottom right;
+    }
+
+    /* 华丽的 & 符号 */
+
+    @font-face {
+        font-family: 'BaskervilleBlackSSiBoldItalic';
+        src: url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.gif');
+        src: url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.gif') format('embedded-opentype'), url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.png') format('woff2'), url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.bmp') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'GoudyOldStyleBT-Italic';
+        src: url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.gif');
+        src: url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.gif') format('embedded-opentype'), url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.png') format('woff2'), url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.bmp') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'AdobeGaramondPro';
+        src: url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.gif');
+        src: url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.gif') format('embedded-opentype'), url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.bmp') format('woff'), url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.jpg') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Palatino-Bold-Italic';
+        src: url('fonts/Palatino-Bold-Italic/Palatino-Bold-Italic.TTF');
+    }
+
+    /* Ampersand 只针对 & 的字体 */
+
+    @font-face {
+        font-family: 'AmpersandBaskervilleBlackSSiBoldItalic';
+        src: url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.gif');
+        src: url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.gif') format('embedded-opentype'), url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.png') format('woff2'), url('fonts/BaskervilleBlackSSiBoldItalic/5bda6e38f629d90114c22fe3.bmp') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        unicode-range: U+26;
+    }
+
+    @font-face {
+        font-family: 'AmpersandGoudyOldStyleBT-Italic';
+        src: url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.gif');
+        src: url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.gif') format('embedded-opentype'), url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.png') format('woff2'), url('fonts/GoudyOldStyleBT-Italic/5bda734af629d90114c22fea.bmp') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        unicode-range: U+26;
+    }
+
+    @font-face {
+        font-family: 'AmpersandAdobeGaramondPro';
+        src: url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.gif');
+        src: url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.gif') format('embedded-opentype'), url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.bmp') format('woff'), url('fonts/AdobeGaramondPro/5bda7729f629d90114c22fef.jpg') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        unicode-range: U+26;
+    }
+
+    @font-face {
+        font-family: 'AmpersandPalatino-Bold-Italic';
+        src: url('fonts/Palatino-Bold-Italic/Palatino-Bold-Italic.TTF');
+        unicode-range: U+26;
+    }
+
+    /* 扩大可点击区域 */
+
+    .clickArea1:hover {
+        border: 40px solid transparent;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, .3) inset;
+    }
+
+    .clickArea2::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        bottom: -40px;
+        left: -40px;
+    }
+
+    /* 自定义复选框 */
+
+    .q31 input[type="checkbox"]+label::before {
+        content: '\a0';
+        display: inline-block;
+        vertical-align: .2em;
+        width: .8em;
+        height: .8em;
+        margin-left: .2em;
+        border-radius: .2em;
+        background: silver;
+        text-indent: .15em;
+        line-height: .65;
+    }
+
+    .q31:not(:first-child) input[type="checkbox"]+label::before {
+        content: '\2713';
+        background: yellowgreen;
+    }
+
+    .q31 input[type="checkbox"] {
+        /* 隐藏 input 控件 */
+        position: absolute;
+        /* clip: rect(0, 0, 0, 0);     警告：这个属性已被废弃。建议使用 clip-path 。 */
+        clip-path: inset(1em 0 0 0);
+    }
+
+    .q31:nth-child(3) input[type="checkbox"]:focus+label::before {
+        box-shadow: 0 0 .1em .1em #58a;
+    }
+
+    .q31:nth-child(3) input[type="checkbox"]:disabled+label::before {
+        background: gray;
+        box-shadow: none;
+        color: #555;
+    }
+</style>
+
+<body>
+    <section>
+        <h1>半透明边框</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 120px; height: 40px; background-color: #000;"></div>
+            <div style="width: 120px; height: 40px; background-color: #000; border: 20px solid rgba(0,0,0,.5);"></div>
+            <div style="width: 120px; height: 40px; background-color: #000; border: 20px solid rgba(0,0,0,.5); background-clip: padding-box;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>多重边框</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 120px; height: 40px; box-shadow: 0 0 0 10px #999;"></div>
+            <div style="width: 120px; height: 40px; box-shadow: 0 0 0 10px #999, 0 0 0 20px #333;"></div>
+            <div style="width: 180px; height: 70px; box-shadow: 0 0 0 10px #333 inset, 0 0 0 20px #999 inset;"></div>
+            <div style="width: 120px; height: 40px; border: 10px dashed #999; outline: 10px dashed #333;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>灵活的背景定位</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; border: 1px dashed rgba(0,0,0,.5); background-image: url('img/leijia.png'); background-repeat: no-repeat; background-position: right bottom;"></div>
+            <div style="width: 180px; height: 180px; border: 1px dashed rgba(0,0,0,.5); background-image: url('img/leijia.png'); background-repeat: no-repeat; background-position: right 20px bottom 20px;"></div>
+            <div style="width: 180px; height: 180px; border: 1px dashed rgba(0,0,0,.5); background-image: url('img/leijia.png'); background-repeat: no-repeat; background-position: calc(100% - 20px) calc(100% - 20px);"></div>
+            <div style="width: 180px; height: 180px; border: 1px dashed rgba(0,0,0,.5); background-image: url('img/leijia.png'); background-repeat: no-repeat; background-position: right bottom; background-origin: content-box; padding-right: 20px; padding-bottom: 20px; box-sizing: border-box;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>边框内圆角</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 120px; height: 40px; border-radius: 20px; outline: 10px solid #333;"></div>
+            <div style="width: 120px; height: 40px; border-radius: 20px; outline: 10px solid #333; box-shadow: 0 0 0 10px #333;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>条纹背景</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000, #f2f2f2);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000 20%, #f2f2f2 80%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000 50%, #f2f2f2 50%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000 50%, #f2f2f2 50%); background-size: 100% 30px; background-repeat: no-repeat;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000 50%, #f2f2f2 0); background-size: 100% 30px;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(#000 33.3%, #f2f2f2 0, #f2f2f2 66.6%, #666 0); background-size: 100% 45px;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: linear-gradient(to right, #000, #f2f2f2);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(to right, #000 20%, #f2f2f2 80%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(to right, #000 50%, #f2f2f2 50%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(to right, #000 50%, #f2f2f2 50%); background-size: 30px 100%; background-repeat: no-repeat;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(to right, #000 50%, #f2f2f2 0); background-size: 30px 100%;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(90deg, #000 33.3%, #f2f2f2 0, #f2f2f2 66.6%, #666 0); background-size: 45px 100%;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000, #f2f2f2);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 20%, #f2f2f2 80%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 50%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 50%); background-size: 30px 100%; background-repeat: no-repeat;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 0); background-size: 30px 100%;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 33.3%, #f2f2f2 0, #f2f2f2 66.6%, #666 0); background-size: 45px 100%;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000, #f2f2f2);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 20%, #f2f2f2 80%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 50%);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 50%); background-size: 30px 30px; background-repeat: no-repeat;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 50%, #f2f2f2 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 33.3%, #f2f2f2 0, #f2f2f2 66.6%, #666 0); background-size: 45px 45px;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 25%, #f2f2f2 0, #f2f2f2 50%, #000 0, #000 75%, #f2f2f2 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(45deg, #000 25%, #f2f2f2 0, #f2f2f2 50%, #000 0, #000 75%, #f2f2f2 0); background-size: 42px 42px;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(60deg, #000 25%, #f2f2f2 0, #f2f2f2 50%, #000 0, #000 75%, #f2f2f2 0); background-size: 42px 42px;"></div>
+            <div style="width: 180px; height: 180px; background: repeating-linear-gradient(45deg, #000, #f2f2f2 30px);"></div>
+            <div style="width: 180px; height: 180px; background: repeating-linear-gradient(45deg, #000, #000 15px, #f2f2f2 0, #f2f2f2 30px);"></div>
+            <div style="width: 180px; height: 180px; background: repeating-linear-gradient(60deg, #000, #000 15px, #f2f2f2 0, #f2f2f2 30px);"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>复杂的背景图片</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-color: #fff; background-image: linear-gradient(90deg, rgba(200, 0, 0, .5) 50%, transparent 0), linear-gradient(rgba(200, 0, 0, .5) 50%, transparent 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #58a; background-image: linear-gradient(#fff 1px, transparent 0), linear-gradient(90deg, #fff 1px, transparent 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #58a; background-image: linear-gradient(#fff 2px, transparent 0), linear-gradient(90deg, #fff 2px, transparent 0), linear-gradient(hsla(0, 0%, 100%, .3) 1px, transparent 0), linear-gradient(90deg, hsla(0, 0%, 100%, .3) 1px, transparent 0); background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #655; background-image: radial-gradient(tan 30%, transparent 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #655; background-image: radial-gradient(tan 30%, transparent 0), radial-gradient(tan 30%, transparent 0); background-size: 30px 30px; background-position: 0 0, 15px 15px;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, #000 50%, transparent 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, #000 25%, transparent 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, #000 25%, transparent 0); background-size: 30px 30px; background-position: 15px 15px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, transparent 75%, #000 0); background-size: 30px 30px;"></div>
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, transparent 75%, #000 0); background-size: 30px 30px; background-position: 15px 15px;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, #000 25%, transparent 0), linear-gradient(45deg, #000 25%, transparent 0), linear-gradient(45deg, transparent 75%, #000 0), linear-gradient(45deg, transparent 75%, #000 0); background-size: 30px 30px; background-position: 0 0, 15px 15px, 15px 15px, 0 0;"></div>
+            <div style="width: 180px; height: 180px; background-color: #f2f2f2; background-image: linear-gradient(45deg, #000 25%, transparent 0, transparent 75%, #000 0), linear-gradient(45deg, #000 25%, transparent 0, transparent 75%, #000 0); background-size: 30px 30px; background-position: 0 0, 15px 15px;"></div>
+            <svg width="100" height="100">
+                <rect x="50" width="50" height="50"></rect>
+                <rect y="50" width="50" height="50"></rect>
+            </svg>
+            <div class="svg-checkerboard"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>伪随机背景</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 100%; height: 30px; background-image: linear-gradient(90deg, #fb3 15%, #655 0, #655 40%, #ab4 0, #ab4 65%, hsl(20, 40%, 90%) 0); background-size: 80px 100%;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 100%; height: 30px; background-color: hsl(20, 40%, 90%); background-image: linear-gradient(90deg, #fb3 10px, transparent 0), linear-gradient(90deg, #ab4 20px, transparent 0), linear-gradient(90deg, #655 20px, transparent 0); background-size: 80px 100%, 60px 100%, 40px 100%;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 100%; height: 30px; background-color: hsl(20, 40%, 90%); background-image: linear-gradient(90deg, #fb3 11px, transparent 0), linear-gradient(90deg, #ab4 23px, transparent 0), linear-gradient(90deg, #655 41px, transparent 0); background-size: 41px 100%, 61px 100%, 83px 100%;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>连续的图像边框</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-image: url('img/border.jpeg'); background-size: cover;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background-image: url('img/border.jpeg'); background-size: cover;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background-image: linear-gradient(#fff, #fff), url('img/border.jpeg'); background-size: cover; background-clip: padding-box, border-box;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background-image: linear-gradient(#fff, #fff), url('img/border.jpeg'); background-size: cover; background-clip: padding-box, border-box; background-origin: border-box;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background: linear-gradient(#fff, #fff) padding-box, url('img/border.jpeg') border-box 0 / cover;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-image: repeating-linear-gradient(-45deg, red, red 10px, transparent 0, transparent 20px, #58a 0, #58a 30px, transparent 0, transparent 40px);"></div>
+            <div style="width: 180px; height: 180px; background-image: repeating-linear-gradient(-45deg, red, red 10px, transparent 0, transparent 20px, #58a 0, #58a 30px, transparent 0, transparent 40px); border: 10px solid transparent;"></div>
+            <div style="width: 180px; height: 180px; background-image: repeating-linear-gradient(-45deg, red, red 10px, transparent 0, transparent 20px, #58a 0, #58a 30px, transparent 0, transparent 40px); border: 10px solid transparent; background-origin: border-box;"></div>
+            <div style="width: 180px; height: 180px; background-image: linear-gradient(#fff, #fff) ,repeating-linear-gradient(-45deg, red, red 10px, transparent 0, transparent 20px, #58a 0, #58a 30px, transparent 0, transparent 40px); border: 10px solid transparent; background-origin: border-box; background-clip: padding-box, border-box;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background: linear-gradient(#fff, #fff) padding-box, repeating-linear-gradient(-45deg, red 0, red 12.5%, transparent 0, transparent 25%, #58a 0, #58a 37.5%, transparent 0, transparent 50%) 0 / 50px 50px;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; background: linear-gradient(#fff, #fff) padding-box, repeating-linear-gradient(-45deg, red 0, red 12.5%, transparent 0, transparent 25%, #58a 0, #58a 37.5%, transparent 0, transparent 50%) 0 / 50px 50px; animation: an 12s linear infinite;"></div>
+            <div style="width: 180px; height: 180px; border: 10px solid transparent; border-image: 10 repeating-linear-gradient(-45deg, red 0, red 10px, transparent 0, transparent 20px, #58a 0, #58a 30px, transparent 0, transparent 40px);"></div>
+            <div style="width: 180px; padding-top: 1em; border-top: .2em solid transparent; border-image: 100% 0 0 linear-gradient(90deg, currentColor 4em, transparent 0); font-size: 20px; font-weight: bold;">
+                This is a footnote.</div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>自适应的椭圆</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; border-radius: 90px; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 180px; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 50%; background-color: #000;"></div>
+            <div style="width: 180px; height: 90px; border-radius: 50% / 100% 100% 0 0; background-color: #000;"></div>
+            <div style="width: 180px; height: 90px; border-radius: 50%  / 0 0 100% 100%; background-color: #000;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; border-radius: 100% 0 0 100% / 50%; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 0 100% 100% 0 / 50%; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 100% 0 0 0 / 100% 0 0 0; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 0 100% 0 0 / 0 100% 0 0; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 0 0 0 100%; background-color: #000;"></div>
+            <div style="width: 180px; height: 180px; border-radius: 0 0 100% 0; background-color: #000;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section id="Parallelogram">
+        <h1>平行四边形</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <a href="#Parallelogram" style="width: 180px; height: 40px; background-color: #000; transform: skewX(-45deg); color: #fff; text-align: center; line-height: 40px;">Home</a>
+            <a href="#Parallelogram" style="width: 180px; height: 40px; background-color: #000; transform: skewX(-45deg); color: #fff; text-align: center; line-height: 40px;">
+                <div>Home</div>
+            </a>
+            <a href="#Parallelogram" style="width: 180px; height: 40px; background-color: #000; transform: skewX(-45deg); color: #fff; text-align: center; line-height: 40px;">
+                <div style="transform: skewX(45deg);">Home</div>
+            </a>
+            <a class="parallelogram" href="#Parallelogram" style="position: relative; width: 180px; height: 40px; color: #fff; text-align: center; line-height: 40px;">Home</a>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>菱形图片</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <img src="img/leijia_black.png" alt="No Image" style="border: 1px dashed rgba(0,0,0,.5); transform: rotate(45deg);"></img>
+            <div style="border: 1px dashed rgba(0,0,0,.5); transform: rotate(45deg); overflow: hidden;">
+                <img src="img/leijia_black.png" alt="No Image" style="max-width: 100%; transform: rotate(-45deg) scale(1.5);">
+            </div>
+            <img src="img/leijia_black.png" alt="No Image" style="border: 1px dashed rgba(0,0,0,.5); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);">
+            <img src="img/leijia_black.png" alt="No Image" style="border: 1px dashed rgba(0,0,0,.5); clip-path: circle(50% at 50% 50%);">
+            <img src="img/leijia_black.png" alt="No Image" style="border: 1px dashed rgba(0,0,0,.5); clip-path: inset(20% 20%);">
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>切角效果</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: #000; background: linear-gradient(-45deg, transparent 15px, #000 0);"></div>
+            <div style="width: 180px; height: 180px; background: #000; background: linear-gradient(-45deg, transparent 15px, #000 0), linear-gradient(45deg, transparent 15px, #000 0); background-size: 50% 100%; background-repeat: no-repeat; background-position: right, left;"></div>
+            <div style="width: 180px; height: 180px; background: #000; background: linear-gradient(135deg, transparent 15px, #000 0), linear-gradient(-135deg, transparent 15px, #000 0), linear-gradient(-45deg, transparent 15px, #000 0), linear-gradient(45deg, transparent 15px, #000 0); background-size: 50% 50%; background-repeat: no-repeat; background-position: top left, top right, bottom right, bottom left;"></div>
+            <div style="width: 180px; height: 180px; background: #000; background: radial-gradient(circle, transparent 15px, #000 0);"></div>
+            <div style="width: 180px; height: 180px; background: #000; background: radial-gradient(circle at top left, transparent 15px, #000 0);"></div>
+            <div style="width: 180px; height: 180px; background: #000; background: radial-gradient(circle at top left, transparent 15px, #000 0), radial-gradient(circle at top right, transparent 15px, #000 0), radial-gradient(circle at bottom right, transparent 15px, #000 0), radial-gradient(circle at bottom left, transparent 15px, #000 0); background-size: 50% 50%; background-repeat: no-repeat; background-position: top left, top right, bottom right, bottom left;"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <svg width="180" height="180">
+                <polygon points="60,0 120,0 180,60 180,120 120,180 60,180 0,120 0,60"></polygon>
+            </svg>
+            <div class="svg-chamfer"></div>
+            <div class="svg-chamfer-border-image"></div>
+            <div style="width: 180px; height: 180px; background-color: #000; clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 90px; background-image: linear-gradient(-135deg, transparent 20%, #000 0), linear-gradient(-45deg, transparent 20%, #000 0); background-size: 100% 50%; background-position: top, bottom; background-repeat: no-repeat; color: #fff; text-align: center; line-height: 90px;">路标</div>
+            <div class="guidepost" style="position: relative; width: 135px; height: 90px; background-color: #000; color: #fff; text-align: center; line-height: 90px;">路标</div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>梯形标签页</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 90px; background-color: #000; transform: perspective(200px) rotateX(45deg); text-align: center; line-height: 90px; color: #fff;">导航</div>
+            <div class="trapezoid" style="position: relative; width: 180px; height: 90px; color: #fff; text-align: center; line-height: 90px;">导航</div>
+            <div class="trapezoid" style="position: relative; width: 180px; height: 90px; color: #fff; text-align: center; line-height: 136px;">导航</div>
+            <div class="trapezoid" style="position: relative; width: 180px; height: 90px; color: #fff; text-align: center; line-height: 90px;">导航</div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>简单的饼图</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div class="pie-chart" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0);"></div>
+            <div class="pie-chart" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0);"></div>
+            <div class="pie-chart" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0);"></div>
+            <div class="pie-chart" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0);"></div>
+            <div class="pie" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0); animation-delay: -20s;">20%</div>
+            <div class="pie" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; background-image: linear-gradient(to right, transparent 50%, #655 0); animation-delay: -60s;">60%</div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50;"></circle>
+            </svg>
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50; stroke-dasharray: 20 10;"></circle>
+            </svg>
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50; stroke-dasharray: 0 314;"></circle>
+            </svg>
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50; stroke-dasharray: 63 314;"></circle>
+            </svg>
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50; stroke-dasharray: 157 314;"></circle>
+            </svg>
+            <svg width="180" height="180">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 50; stroke-dasharray: 314 314;"></circle>
+            </svg>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <svg width="180" height="180" style="transform: rotate(-90deg); background-color: #000; border-radius: 50%;">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 100; stroke-dasharray: 63 314;"></circle>
+            </svg>
+            <svg width="180" height="180" style="transform: rotate(-90deg); background-color: #000; border-radius: 50%;">
+                <circle r="50" cx="90" cy="90" style="fill: #000; stroke: #655; stroke-width: 100; stroke-dasharray: 0 314; animation: fillup 6s linear infinite;"></circle>
+            </svg>
+            <svg viewBox="0 0 32 32" style="width: 180px; height: 180px; border-radius: 50%; background-color: #000; transform: rotate(-90deg);">
+                <circle r="16" cx="16" cy="16" style="fill: #000; stroke: #655; stroke-width: 32; stroke-dasharray: 38 100;"></circle>
+            </svg>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>单侧投影</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 90px; background-color: #a56; box-shadow: 2px 3px 4px rgba(0, 0, 0, .5);"></div>
+            <div style="width: 180px; height: 90px; background-color: #a56; box-shadow: 0 5px 4px -4px rgba(0, 0, 0, 1);"></div>
+            <div style="width: 180px; height: 90px; background-color: #a56; box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 1), -5px 0 5px -5px rgba(0, 0, 0, 1);"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>不规则投影</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 90px; background-color: #000; filter: drop-shadow(2px 2px 10px rgba(0, 0, 0, .5));"></div>
+            <div class="guidepost" style="position: relative; width: 135px; height: 90px; background-color: #000; color: #fff; text-align: center; line-height: 90px; filter: drop-shadow(2px 3px 4px rgba(0, 0, 0, .5));">路标</div>
+            <div style="width: 180px; height: 180px; background: #000; background: radial-gradient(circle, transparent 15px, #000 0); filter: drop-shadow(2px 3px 4px rgba(0, 0, 0, .5));"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>染色效果</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: auto; filter: sepia(1) saturate(4) hue-rotate(295deg);">
+                <img src="img/2.jpeg" alt="">
+            </div>
+            <div class="filter" style="width: 180px; height: auto;">
+                <img src="img/2.jpeg" alt="">
+            </div>
+            <div style="width: 180px; height: auto; background-color: hsl(335, 100%, 50%);">
+                <img src="img/2.jpeg" alt="" style="mix-blend-mode: luminosity;">
+            </div>
+            <div class="filter" style="width: 180px; height: auto; background-image: url('img/2.jpeg'); background-size: 100%; background-color: hsl(335, 100%, 50%); background-blend-mode: luminosity; transition: .5s background-color;"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>毛玻璃效果</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 500px; height: 334px; background-image: url('img/2.jpeg'); background-size: 100%;">
+                <p style="width: 100%; height: 100%; background-color: hsla(0, 0%, 100%, .3);">背景太过花哨，会影响这段文字的阅读。</p>
+            </div>
+            <div style="width: 480px; height: 334px; background-image: url('img/2.jpeg'); background-size: 100%; filter: blur(20px);">
+                <p style="width: 100%; height: 100%; background-color: hsla(0, 0%, 100%, .3);">背景太过花哨，会影响这段文字的阅读。</p>
+            </div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 420px; height: 254px; padding: 40px; background-image:  url('img/2.jpeg'); background-size: 100%; ">
+                <div class="ground-glass" style="position: relative; width: 100%; height: 100%; background-color: hsla(0, 0%, 100%, .3); overflow: hidden;">
+                    <p style="position: relative;">背景太过花哨，会影响这段文字的阅读。</p>
+                </div>
+            </div>
+            <div style="width: 420px; height: 254px; padding: 40px; background: url('img/2.jpeg') 0 / cover fixed;">
+                <div class="ground-glass" style="position: relative; width: 100%; height: 100%; background-color: hsla(0, 0%, 100%, .3); overflow: hidden;">
+                    <p style="position: relative;">背景太过花哨，会影响这段文字的阅读。</p>
+                </div>
+            </div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>折角效果</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background-image: linear-gradient(-135deg, transparent 20px, #58a 0);"></div>
+            <div style="width: 180px; height: 180px; background-image: linear-gradient(-135deg, transparent 50%, #000 0); background-color: #58a; background-size: 30px; background-repeat: no-repeat; background-position: right top;"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(-135deg, transparent 50%, #000 0) no-repeat right top / 20px 20px, linear-gradient(-135deg, transparent 20px, #58a 0);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(-135deg, transparent 50%, #000 0) no-repeat right top / 20px 20px, linear-gradient(-135deg, transparent 15px, #58a 0);"></div>
+            <div style="width: 180px; height: 180px; background: linear-gradient(-150deg, transparent 50%, #000 0) no-repeat right top / 30px 20px, linear-gradient(-150deg, transparent 15px, #58a 0);"></div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div class="dog-ear" style="position: relative; width: 180px; height: 180px; background-image: linear-gradient(-150deg, transparent 20px, #58a 0);"></div>
+            <div class="dog-ear" style="position: relative; width: 180px; height: 180px; background-image: linear-gradient(-150deg, transparent 20px, #58a 0);"></div>
+            <div class="dog-ear" style="position: relative; width: 180px; height: 180px; border-radius: 20px; background-image: linear-gradient(-150deg, transparent 20px, #58a 0);"></div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>连字符断行</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <p style="width: 180px; text-align: justify;">经常看书的朋友会发现，书上的文本都是两端对齐的。但是，在 web 网页中却很少看到这样的排版，原因就是英文字符会呈现字间距过大的效果。虽然可以通过 hyphens: auto; 解决这个问题，但 hyphens 的兼容性不是很好。</p>
+            <p style="width: 180px;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.
+            </p>
+            <p style="width: 180px; text-align: justify;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.
+            </p>
+            <p style="width: 180px; text-align: justify; hyphens: auto;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.
+            </p>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>文本行的斑马条纹</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <pre style="line-height: 1.5; padding: 0.2em; background: beige; background-image: linear-gradient(rgba(0, 0, 0, 0.2) 50%, transparent 0); background-size: auto 3em; background-origin: content-box;">function bodyBuilding() {
+    var d = new Date();
+    if (d.getDay() === 1 || d.getDay() === 3 || d.getDay() === 5) {
+        return true
+    }
+    return false
+}</pre>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>调整 tab 的宽度</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <pre id="pre-tab-size">function bodyBuilding() {
+&#9;var d = new Date();
+&#9;if (d.getDay() === 1 || d.getDay() === 3 || d.getDay() === 5) {
+&#9;&#9;return true
+&#9;}
+&#9;return false
+}</pre>
+            <button onclick="(function () { document.getElementById('pre-tab-size').style.tabSize = '16'; document.getElementById('pre-tab-size').style.MozTabSize = '16'})()">change</button>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>连字</h1>
+        <section style="display: flex; justify-content: space-between; font-size: 50px;">
+            <p>fi fl st ct piffle</p>
+            <p style="font-variant-ligatures: common-ligatures discretionary-ligatures historical-ligatures;">fi fl st ct piffle</p>
+            <p style="font-variant-ligatures: common-ligatures;">fi fl st ct piffle</p>
+        </section>
+        <section style="display: flex; justify-content: space-between; font-size: 50px;">
+            <p style="font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures;">fi fl st ct piffle</p>
+            <p style="font-variant-ligatures: none;">fi fl st ct piffle</p>
+            <p style="font-variant-ligatures: normal;">fi fl st ct piffle</p>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>华丽的 & 符号</h1>
+        <section style="display: flex; justify-content: space-between; font-size: 50px;">
+            <span>&amp; ?</span>
+            <span style="font-family: BaskervilleBlackSSiBoldItalic;">&amp; ?</span>
+            <span style="font-family: 'GoudyOldStyleBT-Italic';">&amp; ?</span>
+            <span style="font-family: AdobeGaramondPro;">&amp; ?</span>
+            <span style="font-family: Palatino-Bold-Italic;">&amp; ?</span>
+        </section>
+        <section style="display: flex; justify-content: space-between; font-size: 50px;">
+            <span>&amp; ?</span>
+            <span style="font-family: AmpersandBaskervilleBlackSSiBoldItalic;">&amp; ?</span>
+            <span style="font-family: 'AmpersandGoudyOldStyleBT-Italic';">&amp; ?</span>
+            <span style="font-family: AmpersandAdobeGaramondPro;">&amp; ?</span>
+            <span style="font-family: AmpersandPalatino-Bold-Italic;">&amp; ?</span>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>自定义下划线</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <p style="width: 180px; border-bottom: 1px solid gray;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; box-shadow: 0 1px gray;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; background: linear-gradient(gray, gray); background-repeat: no-repeat; background-size: 100% 1px; background-position: 0 1.15em;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; background: linear-gradient(gray, gray); background-repeat: no-repeat; background-size: 100% 1px; background-position: 0 1.15em; text-shadow: .05em 0 white, -.05em 0 white;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; background: linear-gradient(90deg, gray 66%, transparent 0); background-repeat: repeat-x; background-size: .2em 2px; background-position: 0 1em;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <p style="width: 180px; text-decoration-line: underline;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; text-decoration-line: underline; text-decoration-skip-ink: none;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; text-decoration-line: underline; text-underline-position: under;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; text-decoration-line: underline; text-decoration-style: wavy;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; text-decoration-line: underline; text-decoration-color: red; text-decoration-style: dotted;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>现实中的文字效果</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <p style="width: 180px; background: hsl(210, 13%, 60%); color: hsl(210, 13%, 30%); text-shadow: 0 .03em .03em hsla(0, 0%, 100%, .8);">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="width: 180px; background: hsl(210, 13%, 40%); color: hsl(210, 13%, 75%); text-shadow: 0 -1px 1px black;">CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows
+                one to adapt the presentation to different types of devices, such as large screens, small screens, or printers.</p>
+            <p style="display: flex; justify-content: center; align-items: center; width: 180px; background: deeppink; color: white; text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black; font-size: 50px;">JiaLe1</p>
+            <p style="display: flex; justify-content: center; align-items: center; width: 180px; background: deeppink; color: white; text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black; font-size: 50px;">JiaLe1</p>
+            <p style="display: flex; justify-content: center; align-items: center; width: 180px; background: #203; color: #ffc; text-shadow: 0 0 .1em, 0 0 1px black, 0 0 .3em; font-size: 50px;">JiaLe1</p>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <p style="display: flex; justify-content: center; align-items: center; width: 180px; background: #58a; color: white; text-shadow: 0 1px hsl(0, 0%, 85%), 0 2px hsl(0, 0%, 80%), 0 3px hsl(0, 0%, 75%), 0 4px hsl(0, 0%, 70%), 0 5px hsl(0, 0%, 65%), 0 5px 10px black; font-size: 50px;">JiaLe1</p>
+            <p style="display: flex; justify-content: center; align-items: center; width: 180px; background: hsl(0, 50%, 45%); color: white; text-shadow: 1px 1px black, 2px 2px black, 3px 3px black, 4px 4px black, 5px 5px black, 6px 6px black, 7px 7px black, 8px 8px black; font-size: 50px;">JiaLe1</p>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>环形文字</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px;">
+                <svg viewBox="0 0 100 100">
+                    <path d="M 0, 50 a 50, 50 0 1, 1 0, 1 z"></path>
+                </svg>
+            </div>
+            <div style="width: 180px;">
+                <svg viewBox="0 0 100 100" style="overflow: visible;">
+                    <path d="M 0, 50 a 50, 50 0 1, 1 0, 1 z" id="circleText" fill="none"></path>
+                    <text>
+                        <textPath xlink:href="#circleText">
+                            html, css, js, wxml, wxss, wxjs, nodejs, vuejs
+                        </textPath>
+                    </text>
+                </svg>
+            </div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>选用合适的鼠标光标</h1>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: gray;">none</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: context-menu;">context-menu</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: cell;">cell</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: vertical-text;">vertical-text</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: alias;">alias</div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: gray; cursor: copy;">copy</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: no-drop;">no-drop</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: not-allowed;">not-allowed</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: ew-resize;">ew-resize</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: ns-resize;">ns-resize</div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: gray; cursor: nesw-resize;">nesw-resize</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: nwse-resize;">nwse-resize</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: col-resize;">col-resize</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: row-resize;">row-resize</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: all-scroll;">all-scroll</div>
+        </section>
+        <section style="display: flex; justify-content: space-between;">
+            <div style="width: 180px; height: 180px; background: gray; cursor: zoom-in;">zoom-in</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: zoom-out;">zoom-out</div>
+            <div style="width: 180px; height: 180px; background: gray; cursor: none;">隐藏光标</div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>扩大可点击区域</h1>
+        <section id="q30" style="display: flex; justify-content: space-between;">
+            <div class="q30" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <div class="clickArea1" style="display: flex; justify-content: center; align-items: center; width: 40px; height: 40px;  border-radius: 50%; background: gray; color: #fff; cursor: pointer;"
+                    onclick="clickArea('0')">+</div>
+            </div>
+            <div class="q30" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <div class="clickArea1" style="display: flex; justify-content: center; align-items: center; width: 40px; height: 40px;  border-radius: 50%; background: gray; background-clip: padding-box; color: #fff; cursor: pointer;"
+                    onclick="clickArea('1')">+</div>
+            </div>
+            <div class="q30" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <div class="clickArea2" style="position: relative; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px;  border-radius: 50%; background: gray; color: #fff; cursor: pointer;"
+                    onclick="clickArea('2')">+</div>
+            </div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+
+    <section>
+        <h1>自定义复选框</h1>
+        <section id="q31" style="display: flex; justify-content: space-between;">
+            <div class="q31" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <input type="checkbox" id="q31-input1">
+                <label for="q31-input1">男</label>
+            </div>
+            <div class="q31" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <input type="checkbox" id="q31-input2">
+                <label for="q31-input2">男</label>
+            </div>
+            <div class="q31" style=" display: flex; justify-content: center; align-items: center; width: 180px; height: 180px;">
+                <input type="checkbox" id="q31-input3">
+                <label for="q31-input3">男</label>
+            </div>
+        </section>
+        <p style="width: 100%; height: 0; margin: 20px 0; border-bottom: 1px dashed rgba(0,0,0,.5);"></p>
+    </section>
+</body>
+
+<script>
+    // 扩大可点击区域
+    var clickArea = function (index) {
+        let el = document.querySelectorAll('#q30 .q30')
+        const arr = ['blue', 'red', 'black', 'green']
+        let i = Math.floor(Math.random() * arr.length)
+        console.log(i, index, el, el[index], el[index].style)
+        el[index].querySelector('div').style.background = arr[i]
+    }
+</script>
+
+</html>
