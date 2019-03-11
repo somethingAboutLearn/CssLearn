@@ -1,0 +1,34 @@
+html, body, article, header, section, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+#list ul li:nth-child(n){
+  --bg: #96ceb4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 50px;
+  height: 250px;
+  background-color: var(--bg);
+}
+
+#list ul li:nth-child(2n) {
+  --bg: #88d8b0;
+  background: var(--bg);
+}
+
+#list ul li:nth-child(3n) {
+  --bg: #ff6f69;
+  background: var(--bg);
+}
+
+#list ul li:nth-child(4n) {
+  --bg: #ffcc5c;
+  background: var(--bg);
+}

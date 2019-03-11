@@ -1,0 +1,15 @@
+@import 'base.css';
+
+#list ul li.adv {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+#list ul li.adv1 {
+  background-image: url('../imgs/adv1.jpg');
+}
+
+#list ul li.adv2 {
+  background-image: url('../imgs/adv2.jpg');
+}
